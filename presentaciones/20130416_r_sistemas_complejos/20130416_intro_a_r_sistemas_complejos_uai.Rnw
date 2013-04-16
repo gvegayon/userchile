@@ -1,0 +1,177 @@
+\documentclass[10pt, letterpaper]{beamer}
+
+\usetheme{Warsaw}
+\usepackage[buttonsize=1em]{animate}
+%\hypersetup{urlcolor=blue}
+
+\title[{\tt R}-UAI]{{\tt R} Doctorado de Sistemas Complejos}
+\author[GGV]{George G. Vega}
+\institute[SPensiones]{Superintendencia de Pensiones}
+\date{\today}
+
+\begin{document}
+
+\frame{\maketitle}
+
+\frame{\frametitle{Agenda}\tableofcontents}
+
+<<loaddata,echo=FALSE,include=FALSE>>=
+rm(list=ls())
+library(knitr)
+library(rgl)
+@
+
+%\SweaveOpts{concordance=TRUE}
+
+%%%%%%%%%% DONDE BUSCAR INFORMACION %%%%%%%%%%
+\section{D\'onde buscar informaci\'on}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Tutoriales Online}
+\begin{itemize}
+\item R wiki (oficial) \url{http://rwiki.sciviews.org/doku.php}
+\item R-programming (wiki-book) \url{http://en.wikibooks.org/wiki/R_Programming}
+\item Quick-R \url{http://www.statmethods.net/}
+\item Flowing Data \url{http://flowingdata.com/category/tutorials/}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Libros}
+\begin{itemize}
+\item Norman Matloff, The Art of R Programming (2009) \url{http://heather.cs.ucdavis.edu/~matloff/132/NSPpart.pdf}
+\item Introducci\'on a R \url{http://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf}
+\item R para principiantes \url{http://cran.r-project.org/doc/contrib/rdebuts_es.pdf}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Otros}
+\begin{itemize}
+\item R-bloggers: Agregador de blogs sobre R \url{http://www.r-bloggers.com/}
+\item Bioconductor: Herramientas para el an\'alisis gen\'etico (biol\'ogico) \url{http://www.bioconductor.org/}
+\item CRAN: The Comprehensive R Archive \url{http://cran.r-project.org}
+\item R Graph Gallery \url{http://gallery.r-enthusiasts.com/}
+\item R Seek: Google de R \url{http://rseek.org/}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%% PAQUETES IMPORTANTES EN R %%%%%%%%%%
+\section{Algunos Paquetes importantes}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}[fragile]
+\frametitle{Paquetes importantes}
+\begin{itemize}
+\item[ggplot2] An implementation of the Grammar Graphics (Wickham 2013)
+\item[lattice] Lattice Graphics
+\item[rgl] 3D visualization device system (OpenGL).
+\item[knitr] A general-purpose package for dynamic report generation in R.
+\item[foreign] Read Data Stored by Minitab, S, SAS, SPSS, Stata, Systat, dBase, ...
+\item[igraph] Network analysis and visualization
+\item[deSolve] General solvers for initial value problems of ordinary  differential equations (ODE), partial differential  equations (PDE), differential algebraic equations (DAE), and delay differential  equations (DDE).
+\end{itemize}
+\end{frame}
+
+\section{Must Know de {\tt R}}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}[fragile]
+\frametitle{Must Know de {\tt R}}
+\begin{itemize}
+\item {\tt R} es un lenguaje de c\'odigo interpretado (no compilado como {\tt C C++ Python}, etc). Sigue esquema OOP (Object Oriented Programming), es din\'amico (mayor parte de sus checkeos se realiza en ejecuci\'on).
+\item Mayor parte de las funciones de R son transmorficas
+\item El comportamiento de las funciones depender\'a de la clase del objeto (puede ser S3 o S4), a estos se les llama m\'etodos
+\item para instalar paquetes {\tt install.packages()}
+\item para pedir ayuda {\tt ??'prcomp'}
+\item Tipos de objetos en R {\tt data.frame, list, matrix, factor}
+\item Recordar semillas en Procesos Pseudo-Aleatorios ({\tt set.seed()})
+\item {\tt lapply} es preferido a {\tt for()} (velocidad).
+\item {\tt R} posee varias rutinas matem\'aticas y estad\'isticas optimizadas (escritas en {\tt C}). En el caso de querer m\'as velocidad, se puede integrar con {\tt C} ({\tt ?.C}), {\tt C++} ({\tt ?.Call}) {\tt Python} ({\tt ?RPy}).
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%% ALGUNOS EJEMPLOS %%%%%%%%%%
+\section{Algunos ejemplos}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+%% Animaciones
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{animaciones}
+<<animate-demo, fig.show='animate', dev='png', out.width='.45\\linewidth', interval=.5, aniopts='controls,loop',  cache=TRUE>>=
+library(animation)
+demo('Mandelbrot', echo = FALSE, package = 'animation')
+@
+\end{frame}
+
+
+% Graficos 3D
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{gr\'aficos 3D}
+<<persp-demo,dev='pdf',fig.show='asis', out.width='.45\\linewidth', cache=TRUE, size='footnotesize'>>=
+# Funcion
+fun <- function(x,y) {return(sin(x) - cos(x))}
+
+# Graficando
+x<-y<-seq(0,2*pi,pi/18)
+persp(x,y,z=outer(x,y,fun), col="blue")
+@
+\end{frame}
+
+%% Analisis numerico (prcomp)
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{An\'alisis de Componentes Principales}
+<<prcomp-demo,echo=TRUE, size='footnotesize'>>=
+data(USArrests)
+x <- prcomp(~Murder + Assault + Rape, data=USArrests, scale=TRUE)
+summary(x)
+@
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{An\'alisis de Componentes Principales}
+<<biplot,dev='pdf', cache=TRUE,out.width='.5\\linewidth',size='footnotesize'>>=
+biplot(x)
+@
+\end{frame}
+
+%% Analisis numerico (regress)
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{Modelos lineales (MCO)}
+<<lm-demo,size='scriptsize'>>=
+data(USArrests)
+x <- lm(Murder~ Assault + Rape, data=USArrests)
+summary(x)
+@
+\end{frame}
+
+%% Graficos con ggplot2
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{ggplot2}
+<<ggplot-demo,dev='pdf',out.width='.5\\linewidth', size='scriptsize'>>=
+library(ggplot2)
+m <- ggplot(USArrests, aes(x=Murder,y=Rape)) # Def del objeto
+m + geom_line() + # Grafico de linea
+  geom_smooth(method="loess") + # IC
+  labs(title="Violaciones vs Asesinatos (IC)") # Etiqueta
+@
+\end{frame}
+
+\frame{\maketitle
+\begin{centering}
+\scriptsize \tt
+(presentaci\'on creada en R + knitr + \LaTeX)
+\end{centering}
+}
+
+\end{document}

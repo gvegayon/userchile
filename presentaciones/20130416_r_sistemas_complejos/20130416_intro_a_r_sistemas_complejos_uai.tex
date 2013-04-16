@@ -1,0 +1,316 @@
+\documentclass[10pt, letterpaper]{beamer}\usepackage{graphicx, color}
+%% maxwidth is the original width if it is less than linewidth
+%% otherwise use linewidth (to make sure the graphics do not exceed the margin)
+\makeatletter
+\def\maxwidth{ %
+  \ifdim\Gin@nat@width>\linewidth
+    \linewidth
+  \else
+    \Gin@nat@width
+  \fi
+}
+\makeatother
+
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\definecolor{fgcolor}{rgb}{0.2, 0.2, 0.2}
+\newcommand{\hlnumber}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0.501960784313725,0,0.329411764705882}{\textbf{#1}}}%
+\newcommand{\hlstring}[1]{\textcolor[rgb]{0.6,0.6,1}{#1}}%
+\newcommand{\hlkeyword}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlargument}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hlcomment}[1]{\textcolor[rgb]{0.180392156862745,0.6,0.341176470588235}{#1}}%
+\newcommand{\hlroxygencomment}[1]{\textcolor[rgb]{0.43921568627451,0.47843137254902,0.701960784313725}{#1}}%
+\newcommand{\hlformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hleqformalargs}[1]{\textcolor[rgb]{0.690196078431373,0.250980392156863,0.0196078431372549}{#1}}%
+\newcommand{\hlassignement}[1]{\textcolor[rgb]{0,0,0}{\textbf{#1}}}%
+\newcommand{\hlpackage}[1]{\textcolor[rgb]{0.588235294117647,0.709803921568627,0.145098039215686}{#1}}%
+\newcommand{\hlslot}[1]{\textit{#1}}%
+\newcommand{\hlsymbol}[1]{\textcolor[rgb]{0,0,0}{#1}}%
+\newcommand{\hlprompt}[1]{\textcolor[rgb]{0.2,0.2,0.2}{#1}}%
+
+\usepackage{framed}
+\makeatletter
+\newenvironment{kframe}{%
+ \def\at@end@of@kframe{}%
+ \ifinner\ifhmode%
+  \def\at@end@of@kframe{\end{minipage}}%
+  \begin{minipage}{\columnwidth}%
+ \fi\fi%
+ \def\FrameCommand##1{\hskip\@totalleftmargin \hskip-\fboxsep
+ \colorbox{shadecolor}{##1}\hskip-\fboxsep
+     % There is no \\@totalrightmargin, so:
+     \hskip-\linewidth \hskip-\@totalleftmargin \hskip\columnwidth}%
+ \MakeFramed {\advance\hsize-\width
+   \@totalleftmargin\z@ \linewidth\hsize
+   \@setminipage}}%
+ {\par\unskip\endMakeFramed%
+ \at@end@of@kframe}
+\makeatother
+
+\definecolor{shadecolor}{rgb}{.97, .97, .97}
+\definecolor{messagecolor}{rgb}{0, 0, 0}
+\definecolor{warningcolor}{rgb}{1, 0, 1}
+\definecolor{errorcolor}{rgb}{1, 0, 0}
+\newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
+
+\usepackage{alltt}
+
+\usetheme{Warsaw}
+\usepackage[buttonsize=1em]{animate}
+%\hypersetup{urlcolor=blue}
+
+\title[{\tt R}-UAI]{{\tt R} Doctorado de Sistemas Complejos}
+\author[GGV]{George G. Vega}
+\institute[SPensiones]{Superintendencia de Pensiones}
+\date{\today}
+
+\begin{document}
+
+\frame{\maketitle}
+
+\frame{\frametitle{Agenda}\tableofcontents}
+
+
+
+
+%\SweaveOpts{concordance=TRUE}
+
+%%%%%%%%%% DONDE BUSCAR INFORMACION %%%%%%%%%%
+\section{D\'onde buscar informaci\'on}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Tutoriales Online}
+\begin{itemize}
+\item R wiki (oficial) \url{http://rwiki.sciviews.org/doku.php}
+\item R-programming (wiki-book) \url{http://en.wikibooks.org/wiki/R_Programming}
+\item Quick-R \url{http://www.statmethods.net/}
+\item Flowing Data \url{http://flowingdata.com/category/tutorials/}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Libros}
+\begin{itemize}
+\item Norman Matloff, The Art of R Programming (2009) \url{http://heather.cs.ucdavis.edu/~matloff/132/NSPpart.pdf}
+\item Introducci\'on a R \url{http://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf}
+\item R para principiantes \url{http://cran.r-project.org/doc/contrib/rdebuts_es.pdf}
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Otros}
+\begin{itemize}
+\item R-bloggers: Agregador de blogs sobre R \url{http://www.r-bloggers.com/}
+\item Bioconductor: Herramientas para el an\'alisis gen\'etico (biol\'ogico) \url{http://www.bioconductor.org/}
+\item CRAN: The Comprehensive R Archive \url{http://cran.r-project.org}
+\item R Graph Gallery \url{http://gallery.r-enthusiasts.com/}
+\item R Seek: Google de R \url{http://rseek.org/}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%% PAQUETES IMPORTANTES EN R %%%%%%%%%%
+\section{Algunos Paquetes importantes}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}[fragile]
+\frametitle{Paquetes importantes}
+\begin{itemize}
+\item[ggplot2] An implementation of the Grammar Graphics (Wickham 2013)
+\item[lattice] Lattice Graphics
+\item[rgl] 3D visualization device system (OpenGL).
+\item[knitr] A general-purpose package for dynamic report generation in R.
+\item[foreign] Read Data Stored by Minitab, S, SAS, SPSS, Stata, Systat, dBase, ...
+\item[igraph] Network analysis and visualization
+\item[deSolve] General solvers for initial value problems of ordinary  differential equations (ODE), partial differential  equations (PDE), differential algebraic equations (DAE), and delay differential  equations (DDE).
+\end{itemize}
+\end{frame}
+
+\section{Must Know de {\tt R}}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}[fragile]
+\frametitle{Must Know de {\tt R}}
+\begin{itemize}
+\item {\tt R} es un lenguaje de c\'odigo interpretado (no compilado como {\tt C C++ Python}, etc). Sigue esquema OOP (Object Oriented Programming), es din\'amico (mayor parte de sus checkeos se realiza en ejecuci\'on).
+\item Mayor parte de las funciones de R son transmorficas
+\item El comportamiento de las funciones depender\'a de la clase del objeto (puede ser S3 o S4), a estos se les llama m\'etodos
+\item para instalar paquetes {\tt install.packages()}
+\item para pedir ayuda {\tt ??'prcomp'}
+\item Tipos de objetos en R {\tt data.frame, list, matrix, factor}
+\item Recordar semillas en Procesos Pseudo-Aleatorios ({\tt set.seed()})
+\item {\tt lapply} es preferido a {\tt for()} (velocidad).
+\item {\tt R} posee varias rutinas matem\'aticas y estad\'isticas optimizadas (escritas en {\tt C}). En el caso de querer m\'as velocidad, se puede integrar con {\tt C} ({\tt ?.C}), {\tt C++} ({\tt ?.Call}) {\tt Python} ({\tt ?RPy}).
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%% ALGUNOS EJEMPLOS %%%%%%%%%%
+\section{Algunos ejemplos}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+%% Animaciones
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{animaciones}
+\begin{knitrout}
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{library}(animation)
+\hlfunctioncall{demo}(\hlstring{"Mandelbrot"}, echo = FALSE, package = \hlstring{"animation"})
+\end{alltt}
+\end{kframe}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\animategraphics[width=.45\linewidth,controls,loop]{2}{figure/animate-demo}{1}{20}
+
+\end{knitrout}
+
+\end{frame}
+
+
+% Graficos 3D
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{gr\'aficos 3D}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlcomment{# Funcion}
+fun <- \hlfunctioncall{function}(x, y) \{
+    \hlfunctioncall{return}(\hlfunctioncall{sin}(x) - \hlfunctioncall{cos}(x))
+\}
+
+\hlcomment{# Graficando}
+x <- y <- \hlfunctioncall{seq}(0, 2 * pi, pi/18)
+\hlfunctioncall{persp}(x, y, z = \hlfunctioncall{outer}(x, y, fun), col = \hlstring{"blue"})
+\end{alltt}
+\end{kframe}
+\includegraphics[width=.45\linewidth]{figure/persp-demo} 
+
+\end{knitrout}
+
+\end{frame}
+
+%% Analisis numerico (prcomp)
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{An\'alisis de Componentes Principales}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{data}(USArrests)
+x <- \hlfunctioncall{prcomp}(~Murder + Assault + Rape, data = USArrests, scale = TRUE)
+\hlfunctioncall{summary}(x)
+\end{alltt}
+\begin{verbatim}
+## Importance of components:
+##                          PC1   PC2    PC3
+## Standard deviation     1.536 0.677 0.4282
+## Proportion of Variance 0.786 0.153 0.0611
+## Cumulative Proportion  0.786 0.939 1.0000
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{An\'alisis de Componentes Principales}
+\begin{knitrout}\footnotesize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{biplot}(x)
+\end{alltt}
+\end{kframe}
+\includegraphics[width=.5\linewidth]{figure/biplot} 
+
+\end{knitrout}
+
+\end{frame}
+
+%% Analisis numerico (regress)
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{Modelos lineales (MCO)}
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{data}(USArrests)
+x <- \hlfunctioncall{lm}(Murder ~ Assault + Rape, data = USArrests)
+\hlfunctioncall{summary}(x)
+\end{alltt}
+\begin{verbatim}
+## 
+## Call:
+## lm(formula = Murder ~ Assault + Rape, data = USArrests)
+## 
+## Residuals:
+##    Min     1Q Median     3Q    Max 
+## -4.867 -1.765 -0.375  1.303  7.886 
+## 
+## Coefficients:
+##             Estimate Std. Error t value Pr(>|t|)    
+## (Intercept)  0.41886    0.97618    0.43     0.67    
+## Assault      0.04003    0.00609    6.58  3.6e-08 ***
+## Rape         0.02514    0.05416    0.46     0.64    
+## ---
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+## 
+## Residual standard error: 2.65 on 47 degrees of freedom
+## Multiple R-squared: 0.645,	Adjusted R-squared: 0.63 
+## F-statistic: 42.6 on 2 and 47 DF,  p-value: 2.76e-11
+\end{verbatim}
+\end{kframe}
+\end{knitrout}
+
+\end{frame}
+
+%% Graficos con ggplot2
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{ggplot2}
+\begin{knitrout}\scriptsize
+\definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
+\begin{alltt}
+\hlfunctioncall{library}(ggplot2)
+m <- \hlfunctioncall{ggplot}(USArrests, \hlfunctioncall{aes}(x=Murder,y=Rape)) \hlcomment{# Def del objeto}
+m + \hlfunctioncall{geom_line}() + \hlcomment{# Grafico de linea}
+  \hlfunctioncall{geom_smooth}(method=\hlstring{"loess"}) + # IC
+  \hlfunctioncall{labs}(title=\hlstring{"Violaciones vs \hlfunctioncall{Asesinatos} (IC)"}) # Etiqueta
+\end{alltt}
+\end{kframe}
+\includegraphics[width=.5\linewidth]{figure/ggplot-demo} 
+
+\end{knitrout}
+
+\end{frame}
+
+\frame{\maketitle
+\begin{centering}
+\scriptsize \tt
+(presentaci\'on creada en R + knitr + \LaTeX)
+\end{centering}
+}
+
+\end{document}
