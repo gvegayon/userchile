@@ -11,7 +11,6 @@
 }
 \makeatother
 
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \definecolor{fgcolor}{rgb}{0.2, 0.2, 0.2}
 \newcommand{\hlnumber}[1]{\textcolor[rgb]{0,0,0}{#1}}%
 \newcommand{\hlfunctioncall}[1]{\textcolor[rgb]{0.501960784313725,0,0.329411764705882}{\textbf{#1}}}%
@@ -63,6 +62,7 @@
 \author[GGV]{George G. Vega}
 \institute[SPensiones]{Superintendencia de Pensiones}
 \date{\today}
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 
 \begin{document}
 
@@ -275,10 +275,10 @@ x <- \hlfunctioncall{lm}(Murder ~ Assault + Rape, data = USArrests)
 ## Assault      0.04003    0.00609    6.58  3.6e-08 ***
 ## Rape         0.02514    0.05416    0.46     0.64    
 ## ---
-## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1 
+## Signif. codes:  0 '***' 0.001 '**' 0.01 '*' 0.05 '.' 0.1 ' ' 1
 ## 
 ## Residual standard error: 2.65 on 47 degrees of freedom
-## Multiple R-squared: 0.645,	Adjusted R-squared: 0.63 
+## Multiple R-squared:  0.645,	Adjusted R-squared:  0.63 
 ## F-statistic: 42.6 on 2 and 47 DF,  p-value: 2.76e-11
 \end{verbatim}
 \end{kframe}
@@ -294,14 +294,22 @@ x <- \hlfunctioncall{lm}(Murder ~ Assault + Rape, data = USArrests)
 \definecolor{shadecolor}{rgb}{0.969, 0.969, 0.969}\color{fgcolor}\begin{kframe}
 \begin{alltt}
 \hlfunctioncall{library}(ggplot2)
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: there is no package called 'ggplot2'}}\begin{alltt}
 m <- \hlfunctioncall{ggplot}(USArrests, \hlfunctioncall{aes}(x=Murder,y=Rape)) \hlcomment{# Def del objeto}
+\end{alltt}
+
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: could not find function "ggplot"}}\begin{alltt}
 m + \hlfunctioncall{geom_line}() + \hlcomment{# Grafico de linea}
   \hlfunctioncall{geom_smooth}(method=\hlstring{"loess"}) + # IC
   \hlfunctioncall{labs}(title=\hlstring{"Violaciones vs \hlfunctioncall{Asesinatos} (IC)"}) # Etiqueta
 \end{alltt}
-\end{kframe}
-\includegraphics[width=.5\linewidth]{figure/ggplot-demo} 
 
+
+{\ttfamily\noindent\bfseries\color{errorcolor}{\#\# Error: object 'm' not found}}\end{kframe}
 \end{knitrout}
 
 \end{frame}
