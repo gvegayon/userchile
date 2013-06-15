@@ -1,0 +1,233 @@
+<<loaddata,echo=FALSE,include=FALSE>>=
+rm(list=ls())
+library(knitr)
+library(rgl)
+@
+
+\documentclass{beamer}
+
+\usetheme{Warsaw}
+\usepackage[buttonsize=1em]{animate}
+%\hypersetup{urlcolor=blue}
+
+\title[useRChile]{Bienvenidos!}
+\author[GGV]{George G. Vega}
+\institute[useRchile]{Grupo de Usuarios de R en Chile}
+\date{11 de Mayo, 2013}
+
+\titlegraphic{\includegraphics[width=2cm]{usaR}\hspace*{4.75cm}~%
+   \includegraphics[width=2cm]{RevolutionAnalyics}
+}
+
+\begin{document}
+
+\begin{frame}
+\maketitle
+\end{frame}
+
+\begin{frame}
+
+\frametitle{Agenda}
+\tableofcontents
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introducci\'on}
+
+
+\begin{frame}
+\frametitle{Introducci\'on}
+'¿Qu\'e es {\tt rgexf}?
+
+Es un paquete (ojo no librar\'ia) que permite trabajar con archivos GEXF.
+
+¿'Qu\'e es un archivo GEXF?
+
+Documento XML que describe grafos (redes), el cual soporta atributos est\'aticos/din\'amicos, spells, atributos visuales (colo, tama\~no, posici\'on, etc.)
+
+¿Quienes usan esto?
+\begin{itemize}
+\item Gephi (autores de GEXF): ``like photoshop for graphs''
+\item sigma-js: Librar\'ia de java-script que permite desplegar grafos en internet
+\item Etc.
+\end{itemize}
+\end{frame}
+
+\section{Algunos hechos (motivantes para nosotros!)}
+\begin{frame}
+\frametitle{Algunos hechos (motivantes para nosotros!)}
+Desde su publicaci\'on hemos recibido consultas desde distintas instituciones/partes del mundo!:
+\begin{itemize}
+\item Prom de 200 descargas mensuales (CRAN)
+\item Mismo promedio de visitas mensuales al sitio del proyecto
+\item Atenci\'on de investigadores de Universidades (Harvard y Standford por ejemplo)
+\item Art\'iculo en el Blog oficial de Gephi
+\item Primeros en aparecer en Sitio oficial de GEXF
+\item Algunos blogs que han escrito sobre nosotros por ah\'i
+\item Un par de preguntas en Stackoverflow (R Yei!)
+\item ...
+\end{itemize}
+\end{frame}
+
+\section{C\'omo armar librer\'ias en R}
+\begin{frame}
+\frametitle{C\'omo armar librer\'ias en R}
+\begin{itemize}
+\item Colecci\'on de funciones (puede ser solo 1)
+\item Estructura de carpetas
+\item Bien documentada (man)
+\item Dependencias bien definidas
+\item Funciones, m\'etodos y src ``extranjero'' declarados
+\end{itemize}
+\end{frame}
+
+\begin{frame}
+\frametitle{Algunos tips}
+A los usuarios les gustan los demos
+Instalar {\tt dev\_tools}
+Utilizar control de versi\'on publicado (Github/google code/bitbucket)
+Documentar m\'as que bien
+Usar carpeta test (no te cuentan mucho)
+Usar el archivo .Rbuildignore
+Difundir, difundir difundir
+\end{frame}
+
+\begin{frame}
+\frametitle{Un poco de historia}
+\framesubtitle{R, R Foundation y CRAN}
+\begin{itemize}[<+->]
+\item R es un lenguaje y ambiente para computaci\'on estad\'istica y gr\'aficos.
+\item Es un proyecto GNU similar al lenguaje y ambiente de S el cual fu\'e implementado en los laboratorios Bell (AT\&T) por John Chambers y Cia.
+\item R fue desarrollado por Robert Gentleman \& Ross Ihaka (R: A Language for Data Analysis and Graphics (1996)
+Journal of Computational and Graphical Statistics)
+\item CRAN (The Comprehensive R Network Archive) es una red de servidores Web y FTP alrededor del mundo que almacenan versiones de c\'odigo y documentaci\'on para R id\'entica.
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{The R Fundation for Statistical Computing}
+The R fundation for Statistical Computing es una organizaci\'on sin fines de lucro trabajando
+para el inter\'es com\'un. A sido construida por los miembros de R Development Core Team de
+forma tal de:
+\begin{itemize}[<+->]
+\item Proveer soporte para R project y otras innovaciones en estad\'istica computacional. Creemos
+que seR ha alcanzado una madurez y se ha convertido en una herramienta valiosa y nos gustar\'ia
+asegurar su continuo desarrollo y el desarrollo de futuras innovaciones para la estad\'istica
+computacional.
+\item Proveer un punto de referencia para individuos, instituciones o empresas que quieran
+aportar o interactuar  con la comunidad de desarrolladores de R.
+\item Poseer y administrar el copyright de R y su documentaci\'on
+\end{itemize}
+
+R es una parte oficial del proyecto GNU de Free Software Foundation
+\end{frame}
+
+\begin{frame}
+\frametitle{Desarrollo de R}
+\framesubtitle{Task View de CRAN}
+
+\begin{itemize}[<+->]
+\item CRAN mantiene un listado extenso de \'areas de desarrollo de R, el Task View.
+\item En ellas de detalla de manera exaustiva los paquetes tanto de R Dev Core
+como de aquellos provistos por usuarios que apuntan en aquella direcci\'on
+\item Algunas task views:
+\begin{itemize}
+\item Ecuaciones diferenciales
+\item Econometr\'ia Computacional
+\item Visualizaci\'on Gr\'afica
+\item Computaci\'on de Alto rendimiento y en paralelo con R
+\item Aprendizaje de m\'aquina y Estad\'istico
+\item Estad\'isticas para las ciencias sociales
+\end{itemize}
+\end{itemize}
+\end{frame}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+
+%%%%%%%%%% DONDE BUSCAR INFORMACION %%%%%%%%%%
+\section{D\'onde buscar informaci\'on}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Tutoriales Online}
+\begin{itemize}[<+->]
+\item R wiki (oficial) \url{http://rwiki.sciviews.org/doku.php}
+\item R-programming (wiki-book) \url{http://en.wikibooks.org/wiki/R_Programming}
+\item Quick-R \url{http://www.statmethods.net/}
+\item Flowing Data \url{http://flowingdata.com/category/tutorials/}
+\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Libros}
+
+\begin{figure}
+\begin{minipage}[b]{0.65\textwidth}
+\begin{itemize}%[<+->]
+\item Norman Matloff, The Art of R Programming (2009) \url{http://heather.cs.ucdavis.edu/~matloff/132/NSPpart.pdf}
+\item Introducci\'on a R \url{http://cran.r-project.org/doc/contrib/R-intro-1.1.0-espanol.1.pdf}
+\item R para principiantes \url{http://cran.r-project.org/doc/contrib/rdebuts_es.pdf}
+\end{itemize}
+\end{minipage}
+%\hfill
+\begin{minipage}[b]{0.25\textwidth}
+\centering
+%\includegraphics[width=1\textwidth]{theartofr}
+\end{minipage}
+\end{figure}
+\end{frame}
+
+\begin{frame}
+\frametitle{D\'onde buscar informaci\'on}
+\framesubtitle{Otros}
+\begin{itemize}[<+->]
+\item R-bloggers: Agregador de blogs sobre R \url{http://www.r-bloggers.com/}
+\item Bioconductor: Herramientas para el an\'alisis gen\'etico (biol\'ogico) \url{http://www.bioconductor.org/}
+\item CRAN: The Comprehensive R Archive \url{http://cran.r-project.org}
+\item R Graph Gallery \url{http://gallery.r-enthusiasts.com/}
+\item R Seek: Google de R \url{http://rseek.org/}
+\item The R Journal \url{http://journal.r-project.org}
+\end{itemize}
+\end{frame}
+
+\section{Algunos Ejemplos}
+\frame{\frametitle{Agenda}\tableofcontents[currentsection]}
+
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{animaciones}
+<<animate-demo, fig.show='animate', dev='png', out.width='.45\\linewidth', interval=.5, aniopts='controls,loop',  cache=TRUE>>=
+library(animation)
+demo('Mandelbrot', echo = FALSE, package = 'animation')
+@
+\end{frame}
+
+
+% Graficos 3D
+\begin{frame}[fragile]
+\frametitle{Algunos Ejemplos}
+\framesubtitle{gr\'aficos 3D}
+<<persp-demo,dev='pdf',fig.show='asis', out.width='.45\\linewidth', cache=TRUE, size='footnotesize'>>=
+# Funcion
+fun <- function(x,y) {return(sin(x) - cos(x))}
+
+# Graficando
+x<-y<-seq(0,2*pi,pi/18)
+persp(x,y,z=outer(x,y,fun), col="blue")
+@
+\end{frame}
+
+\def\title{Gracias!}
+\frame{
+\maketitle
+\begin{centering}
+\scriptsize \tt
+(presentaci\'on creada en R + knitr + \LaTeX)
+\end{centering}
+}
+
+\end{document}
