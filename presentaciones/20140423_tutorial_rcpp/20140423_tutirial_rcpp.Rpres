@@ -1,0 +1,58 @@
+Tutorial de `Rcpp`
+========================================================
+author: George Vega
+date: 23 Abr 2014
+
+Agenda
+================
+
+- Por qué utilizar `C++` en R?
+- `Rcpp` al rescate
+- Ejemplos
+
+
+Ejemplo de Dirk Eddelbuettel
+=====================
+
+Considere la siguiente función
+
+$$
+f(n) = \begin{cases}
+n & \text{si $n<2$} \\
+f(n-1) + f(n - 2) & \text{si $n\geq2$}
+\end{cases}
+$$
+
+=====================
+Su implementación en `R` sería
+
+```{r fibo_r, cache=TRUE, results='hold'}
+f <- function(n) {
+  if (n<2) return(n)
+  
+  return(f(n-1) + f(n-2))
+}
+
+sapply(0:9, f)
+```
+=====================
+Y su equivalente en `Rcpp`
+```{r fibo_rcpp, cache=TRUE, results='hold'}
+library(Rcpp)
+cppFunction('
+int g(int n) {
+  if (n < 2) return(n);
+  return(g(n-1) + g(n-2));
+}'
+)
+
+sapply(0:9, g)
+```
+
+======================
+Y por qué la molestia?
+
+```{r fibo_bench}
+library(rbenchmark)
+benchmark(f(20), g(20))[,1:4]
+```
