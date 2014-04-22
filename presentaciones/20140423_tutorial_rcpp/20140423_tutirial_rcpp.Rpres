@@ -2,6 +2,14 @@ Tutorial de `Rcpp`
 ========================================================
 author: George Vega
 date: 23 Abr 2014
+transition:fade
+navigation:section
+
+Grupo de Usuarios de R en Chile
+
+```{r setup , include=FALSE , results='hold'}
+library(Rcpp)
+```
 
 Agenda
 ================
@@ -10,6 +18,20 @@ Agenda
 - `Rcpp` al rescate
 - Ejemplos
 
+Requerimientos
+================
+type:section
+
+Para poder utilizar `Rcpp` es necesario contar con lo siguiente:
+
+* `R` (>= 3.0.0)
+* `gcc` (Incluido en [Rtools](http://cran.r-project.org/bin/windows/Rtools/))
+
+Adicionalmente se sugiere
+
+* Rstudio [http://www.rstudio.com](http://www.rstudio.com)
+* El paquete `inline` [(CRAN)](http://cran.r-project.org/web/packages/inline)
+* El paquete `rbenchmark` [(CRAN)](http://cran.r-project.org/web/packages/rbenchmark)
 
 Ejemplo de Dirk Eddelbuettel
 =====================
@@ -52,7 +74,107 @@ sapply(0:9, g)
 ======================
 Y por qué la molestia?
 
-```{r fibo_bench}
+Misma función... diferente desempeño
+
+```{r fibo_bench, dependson=c(-1,-2)}
 library(rbenchmark)
-benchmark(f(20), g(20))[,1:4]
+# benchmark(f(20), g(20))[,1:4]
 ```
+
+Maneras de utilizar `Rcpp`
+=====================
+incremental: true
+
+* `cppFunction` Define funciones de Rcpp de manera dinámica.
+* `sourceCpp` Ejecuta archivos `.cpp`, evalua e importa funciones (además permite incorporar bloques de `R`).
+* `evalCpp` Evalua expresiones escritas en `C++`
+
+Ejemplos evalCpp: 
+=================
+
+Obteniendo constantes
+
+``` {r evalcpp1}
+library(Rcpp)
+evalCpp( "PI" )
+evalCpp( "std::numeric_limits<double>::max()" )
+```
+
+Ejemplos con `sourceCpp`
+================
+
+Utilizando la etiqueta `// [[Rcpp::export]]`, `sourceCpp` importa funciones escritas
+en `C++` a `R` de manera dinámica. Más aún, permite incluir bloques de código 
+de `R`.
+
+```cpp
+#include <Rcpp.h>
+
+using namespace Rcpp;
+
+// [[Rcpp::export]]
+int g(int n) {
+  if (n < 2) return(n);
+  return(g(n-1) + g(n-2));
+}
+
+/*** R
+g(10)
+***/
+```
+
+Tipos de Objetos en `Rcpp`
+=========================
+type:section
+
+En lo que sigue, revisaremos las clases de objetos en `Rcpp` y como 
+manipularlos.
+
+* `NumericVector`: Vectores numéricos. Se accede con `[i]`.
+* `NumericMatrix`: Matrices numéricas. Se accede con `(i,j)`.
+* `List`: Listas. Se accede con `["objeto"]`.
+* `CharacterVector`: Idem Numéricos.
+* `CharacterMatrix`: Idem Numéricos.
+
+NumericVector
+===================
+type:prompt
+
+``` {r}
+cppFunction("
+NumericVector logabs(NumericVector x) {
+  // Inicializando
+  NumericVector out(x.size());
+
+  for(int i=0;i<x.size();i++)
+    out[i] = log(fabs(x[i]));
+
+  return out;
+}")
+
+logabs(-5:5)
+```
+
+NumericVector
+===================
+type:prompt
+
+Como también podemos escribirlo de una forma más sencilla!
+
+``` {r}
+cppFunction("
+NumericVector logabs(NumericVector x) {
+  return log(abs(x));
+}")
+
+logabs(-5:5)
+```
+
+
+
+Referencias
+======================
+
+
+* **Wickham, Hadley**, 2014, *Advanced R programming*,  http://adv-r.had.co.nz/
+* **Eddelbuettel, Dirk**, 2013, *Rcpp by Examples*, Workshop preceding R/Finance 2013, http://dirk.eddelbuettel.com/papers/rcpp_rfinance_may2013.pdf.
