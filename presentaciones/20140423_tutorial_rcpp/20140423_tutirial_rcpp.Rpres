@@ -76,9 +76,44 @@ Y por qué la molestia?
 
 Misma función... diferente desempeño
 
-```{r fibo_bench, dependson=c(-1,-2)}
+```{r fibo_bench, dependson=c(-1,-2), cache=TRUE}
 library(rbenchmark)
-# benchmark(f(20), g(20))[,1:4]
+benchmark(f(20), g(20))[,1:4]
+```
+
+Rcpp vs R API
+======================
+Lo que en `Rcpp` implica acceder a una función del paquete
+`stats`:
+
+```cpp
+Environment stats("package:stats");
+Function rnorm = stats["rnorm"];
+return rnorm(10, Named("sd", 100.0));
+```
+
+Rcpp vs R API
+======================
+
+en la API de R equivale a un desastre!
+
+```cpp
+SEXP stats = PROTECT(
+  R_FindNamespace(
+    mkString("stats")));
+SEXP rnorm = PROTECT(
+  findVarInFrame(stats,
+    install("rnorm")));
+SEXP call = PROTECT(
+  LCONS( rnorm,
+    CONS(ScalarInteger(10),
+      CONS(ScalarReal(100.0),
+        R_NilValue))));
+SET_TAG(CDDR(call),install("sd"));
+SEXP res = PROTECT(eval(call,
+  R_GlobalEnv));
+UNPROTECT(4);
+return res;
 ```
 
 Maneras de utilizar `Rcpp`
@@ -94,8 +129,7 @@ Ejemplos evalCpp:
 
 Obteniendo constantes
 
-``` {r evalcpp1}
-library(Rcpp)
+``` {r evalcpp1, cache=TRUE}
 evalCpp( "PI" )
 evalCpp( "std::numeric_limits<double>::max()" )
 ```
@@ -136,11 +170,32 @@ manipularlos.
 * `CharacterVector`: Idem Numéricos.
 * `CharacterMatrix`: Idem Numéricos.
 
-NumericVector
+Ejemplo con NumericVector (R 1)
 ===================
-type:prompt
 
-``` {r}
+``` {r rlogabs, cache=TRUE}
+x <- -5:5
+x
+log(abs(x))
+```
+
+Ejemplo con NumericVector (R 2)
+===================
+
+``` {r rlogabsloop, cache=TRUE, dependson=c(-1)}
+rlogabs <- function(x) {
+  for (i in 1:length(x)) {
+    x[i] <- log(abs(x[i]))
+  }
+  return(x)
+}
+rlogabs(x)
+```
+
+Ejemplo con NumericVector (Rcpp 1)
+===================
+
+``` {r cpplogabs, cache=TRUE, dependson=c(-1)}
 cppFunction("
 NumericVector logabs(NumericVector x) {
   // Inicializando
@@ -152,30 +207,54 @@ NumericVector logabs(NumericVector x) {
   return out;
 }")
 
-logabs(-5:5)
+logabs(x)
 ```
 
-NumericVector
+Ejemplo con NumericVector (Rcpp 2)
 ===================
-type:prompt
 
-Como también podemos escribirlo de una forma más sencilla!
+Utilizando [_sugar_](http://adv-r.had.co.nz/Rcpp.html#rcpp-sugar) podemos escribirlo de una forma más sencilla!
 
-``` {r}
+``` {r cpplogabssuggar, cache=TRUE, dependson=c(-1)}
 cppFunction("
 NumericVector logabs(NumericVector x) {
   return log(abs(x));
 }")
 
-logabs(-5:5)
+logabs(x)
 ```
 
+Algunas de las funciones incorporadas son `abs(x)`, `exp(x)`, `floor(x)`, `ceil(x)`, `pow(x, z)`. (más en breve)
 
+Ejemplo con NumericMatrix (R)
+===================
+
+``` {r rextractdiag, cache=TRUE}
+mimat <- matrix(1:9, nrow=3)
+mimat
+
+diag(mimat)
+```
+
+Ejemplo con NumericMatrix (Rcpp)
+===================
+
+``` {r cppextractdiag, cache=TRUE}
+cppFunction("
+NumericVector cppdiag(NumericMatrix x) {
+  NumericVector out(x.nrow());
+  for(int i=0;i<x.nrow();i++)
+    out[i] = x(i,i);
+  return out;
+}")
+
+cppdiag(mimat)
+```
 
 Referencias
 ======================
 
-
+* **Eddelbuettel, Dirk & Francois, Romain**, 2011, *Rcpp: Seamless R and C++ Integration*, Journal of Statistical Software, http://www.jstatsoft.org/v40/i08
 * **Wickham, Hadley**, 2014, *Advanced R programming*,  http://adv-r.had.co.nz/
 * **Eddelbuettel, Dirk**, 2013, *Rcpp by Examples*, Workshop preceding R/Finance 2013, http://dirk.eddelbuettel.com/papers/rcpp_rfinance_may2013.pdf.
-* **Allaire, JJ**, *Rcpp Attributes*, 2013, Bay Area R User Group, http://rpubs.com/jjallaire/rcpp-attributes-bayarea-useR
+* **Allaire, JJ**, 2013, *Rcpp Attributes*, Bay Area R User Group, http://rpubs.com/jjallaire/rcpp-attributes-bayarea-useR
