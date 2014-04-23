@@ -15,10 +15,18 @@ library(Rcpp)
 
 Agenda
 ================
+type:section
 
-- Por qué utilizar `C++` en R?
-- `Rcpp` al rescate
-- Ejemplos
+En esta presentación...
+
+* Introducción
+ * Requerimientos
+ * Verdades de `Rcpp`
+ * Patada inicial!
+* Cómo utilizar `Rcpp`
+ * Cómo 'compilar' con `Rcpp`
+ * Definición del lenguaje
+ * Ejemplos
 
 Requerimientos
 ================
@@ -155,8 +163,8 @@ El paquete `Rcpp` permite compilar código a través de
 tres funciones clave:
 
 * `cppFunction` Define funciones de Rcpp de manera dinámica.
-* `sourceCpp` Ejecuta archivos `.cpp`, evalua e importa funciones (además permite incorporar bloques de `R`).
-* `evalCpp` Evalua expresiones escritas en `C++`
+* `sourceCpp` Ejecuta archivos `.cpp`, evalúa e importa funciones (además permite incorporar bloques de `R`).
+* `evalCpp` Evalúa expresiones escritas en `C++`
 
 (Nota: En _Rstudio_ presionar [Ctrl] + [Enter] equivale a `sourceCpp`)
 
@@ -251,9 +259,9 @@ Ejemplo con NumericVector (Rcpp 2)
 Utilizando [_sugar_](http://adv-r.had.co.nz/Rcpp.html#rcpp-sugar) podemos escribirlo de una forma más sencilla!
 
 ``` {r cpplogabssuggar, cache=TRUE, results='hold'}
-cppFunction("
+cppFunction(" 
 NumericVector cppla2(NumericVector x) {
-  return log(abs(x));
+  return log(abs(x)); 
 }")
 
 cppla1(x)
@@ -261,11 +269,12 @@ cppla1(x)
 
 Algunas de las funciones incorporadas son `abs(x)`, `exp(x)`, `floor(x)`, `ceil(x)`, `pow(x, z)`. (más en breve)
 
-Ejemplo con NumericVector (Benchmark)
+Ejemplo con NumericVector (R vs Rcpp)
 =========================
 
 ```{r bechnumericvect, cache=TRUE}
-benchmark(log(abs(x)), rla(x),cppla1(x),cppla2(x))[,1:4]
+x <- 1:10000
+rbenchmark::benchmark(log(abs(x)), rla(x),cppla1(x),cppla2(x))[,1:4]
 ```
 
 Ejemplo con NumericMatrix (R)
@@ -295,8 +304,7 @@ cppdiag(mimat)
 
 Ejemplo con List (R)
 ===================
-Crearemos una lista con numeros aleatorios una matriz
-y una lista de texto
+Crearemos una lista con números aleatorios un vector char y un vector 'al cuadrado'
 ``` {r rlist, cache=TRUE}
 rlist <- function(x,y,z) {
     return(list(
@@ -387,6 +395,18 @@ f <- sqrt
 benchmark(rf(x,f), cppf(x, f))[,1:4]
 ```
 
+Genial! Ahora... donde buscar más info?
+======================
+type:section
+
+* El paquete `Rcpp` cuenta con 9 vignettes.
+* Stackoverflow tiene el tag [[rcpp]](http://stackoverflow.com/questions/tagged/rcpp)
+* El sitio web del proyecto ya cuenta con [una galería](gallery.rcpp.org).
+* El libro [_Seamless R and C++..._](http://www.springer.com/statistics/computational+statistics/book/978-1-4614-6867-7)
+* El tutorial [_Advanced R Programming..._](http://adv-r.had.co.nz/Rcpp.html) de Hadley Wickham.
+* La lista de correo [Rcpp-devel](https://www.mail-archive.com/rcpp-devel@lists.r-forge.r-project.org/).
+
+
 Muchas Gracias!
 ======================================================
 type:section
@@ -396,7 +416,7 @@ http://ggvega.com
 
 **Grupo de Usuarios de R en Chile, 23 Abr 2014**
 
-(presentacion hecha con _Rstudio_ + _knitr_)
+(presentación creada con _Rstudio_ + _knitr_)
 
 ![Usua](../../imagenes/patrocinio.png)
 
@@ -407,4 +427,3 @@ Referencias
 * **Wickham, Hadley**, 2014, *Advanced R programming*,  http://adv-r.had.co.nz/
 * **Eddelbuettel, Dirk**, 2013, *Rcpp by Examples*, Workshop preceding R/Finance 2013, http://dirk.eddelbuettel.com/papers/rcpp_rfinance_may2013.pdf.
 * **Allaire, JJ**, 2013, *Rcpp Attributes*, Bay Area R User Group, http://rpubs.com/jjallaire/rcpp-attributes-bayarea-useR
-* **usuaRios**, 20\*\*, StackOverflow [rcpp], http://stackoverflow.com/questions/tagged/rcpp
