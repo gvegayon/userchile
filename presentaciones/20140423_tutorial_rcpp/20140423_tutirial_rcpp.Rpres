@@ -1,11 +1,13 @@
-Tutorial de `Rcpp`
+Tutorial Rcpp: Cómo usar C++ en R con sólo 3 líneas!
 ========================================================
 author: George Vega
 date: 23 Abr 2014
-transition:fade
+transition:zoom
 navigation:section
 
-Grupo de Usuarios de R en Chile
+**Grupo de Usuarios de R en Chile**
+
+![Usua](../../imagenes/patrocinio.png)
 
 ```{r setup , include=FALSE , results='hold'}
 library(Rcpp)
@@ -33,8 +35,28 @@ Adicionalmente se sugiere
 * El paquete `inline` [(CRAN)](http://cran.r-project.org/web/packages/inline)
 * El paquete `rbenchmark` [(CRAN)](http://cran.r-project.org/web/packages/rbenchmark)
 
-Ejemplo de Dirk Eddelbuettel
+Verdades de Rcpp
 =====================
+type:section
+
+Algunos motivos para utilizar `Rcpp`?
+
+* Es muy rápido.
+* Es una alternativa (mucho) más sencilla a la R API
+* Se está masificando (en desarrollo de paquetes):
+ * [Amelia](http://cran.r-project.org/web/packages/Amelia/index.html)
+ * [forecast](http://cran.r-project.org/web/packages/forecast/index.html)
+ * [RStan](http://mc-stan.org/rstan.html)
+ * [rugarch](http://cran.r-project.org/web/packages/rugarch/index.html)
+ * [bigviz](https://github.com/hadley/bigvis)
+
+Calentando motores...
+=====================
+type:section
+
+Nos saltaremos la parte del típico '`Hola mundo`' para pasar de lleno a `Rcpp`
+
+Para eso partiremos con un ejemplo propuesto por uno de los creadores de `Rcpp`, [Dirk Eddelbuettel](http://dirk.eddelbuettel.com/)
 
 Considere la siguiente función
 
@@ -49,18 +71,23 @@ $$
 Su implementación en `R` sería
 
 ```{r fibo_r, cache=TRUE, results='hold'}
+# Definiendo la funcion
 f <- function(n) {
   if (n<2) return(n)
   
   return(f(n-1) + f(n-2))
 }
 
+# Aplicando la funcion a un vector de 0 a 9
 sapply(0:9, f)
 ```
 =====================
 Y su equivalente en `Rcpp`
 ```{r fibo_rcpp, cache=TRUE, results='hold'}
+# Cargando Rcpp
 library(Rcpp)
+
+# Definiendo la funcion
 cppFunction('
 int g(int n) {
   if (n < 2) return(n);
@@ -68,23 +95,27 @@ int g(int n) {
 }'
 )
 
+# Aplicando la funcion a un vector de 0 a 9
 sapply(0:9, g)
 ```
 
 ======================
+incremental: true
 Y por qué la molestia?
 
-Misma función... diferente desempeño
+Misma función... diferente desempeño!
 
 ```{r fibo_bench, dependson=c(-1,-2), cache=TRUE}
 library(rbenchmark)
 benchmark(f(20), g(20))[,1:4]
 ```
 
+* `Rcpp` es al menos x400 más rápido!
+
 Rcpp vs R API
 ======================
-Lo que en `Rcpp` implica acceder a una función del paquete
-`stats`:
+type:section
+Lo que en `Rcpp` implica acceder a una función del paquete `stats` ...
 
 ```cpp
 Environment stats("package:stats");
@@ -95,7 +126,7 @@ return rnorm(10, Named("sd", 100.0));
 Rcpp vs R API
 ======================
 
-en la API de R equivale a un desastre!
+... en la API de R equivale a un desastre!
 
 ```cpp
 SEXP stats = PROTECT(
@@ -118,20 +149,28 @@ return res;
 
 Maneras de utilizar `Rcpp`
 =====================
-incremental: true
+type: section
+
+El paquete `Rcpp` permite compilar código a través de
+tres funciones clave:
 
 * `cppFunction` Define funciones de Rcpp de manera dinámica.
 * `sourceCpp` Ejecuta archivos `.cpp`, evalua e importa funciones (además permite incorporar bloques de `R`).
 * `evalCpp` Evalua expresiones escritas en `C++`
 
+(Nota: En _Rstudio_ presionar [Ctrl] + [Enter] equivale a `sourceCpp`)
+
 Ejemplos evalCpp: 
 =================
 
-Obteniendo constantes
+Como `cppFunction` ya lo vimos, partiremos con
+`evalCpp`
 
 ``` {r evalcpp1, cache=TRUE}
-evalCpp( "PI" )
-evalCpp( "std::numeric_limits<double>::max()" )
+# Obteniendo constantes
+evalCpp("PI")
+evalCpp("std::numeric_limits<double>::max()")
+evalCpp("__cplusplus")
 ```
 
 Ejemplos con `sourceCpp`
@@ -164,16 +203,15 @@ type:section
 En lo que sigue, revisaremos las clases de objetos en `Rcpp` y como 
 manipularlos.
 
-* `NumericVector`: Vectores numéricos. Se accede con `[i]`.
-* `NumericMatrix`: Matrices numéricas. Se accede con `(i,j)`.
-* `List`: Listas. Se accede con `["objeto"]`.
-* `CharacterVector`: Idem Numéricos.
-* `CharacterMatrix`: Idem Numéricos.
+* Vectores `IntegerVector`, `NumericVector`, `LogicalVector`, `CharacterVector` (Se accede con `[i]`).
+* Matrices `IntegerMatrix`, `NumericMatrix`, ... (Se accede con `(i,j)`).
+* Listas `List` (Se accede con `_["objeto"]`).
+* Funciones `Function`
 
 Ejemplo con NumericVector (R 1)
 ===================
 
-``` {r rlogabs, cache=TRUE}
+``` {r rlogabs, cache=TRUE, results='hold'}
 x <- -5:5
 x
 log(abs(x))
@@ -182,32 +220,29 @@ log(abs(x))
 Ejemplo con NumericVector (R 2)
 ===================
 
-``` {r rlogabsloop, cache=TRUE, dependson=c(-1)}
-rlogabs <- function(x) {
+``` {r rlogabsloop, cache=TRUE,results='hold'}
+rla <- function(x) {
   for (i in 1:length(x)) {
     x[i] <- log(abs(x[i]))
   }
   return(x)
 }
-rlogabs(x)
+rla(x)
 ```
 
 Ejemplo con NumericVector (Rcpp 1)
 ===================
 
-``` {r cpplogabs, cache=TRUE, dependson=c(-1)}
+``` {r cpplogabs, cache=TRUE, results='hold'}
 cppFunction("
-NumericVector logabs(NumericVector x) {
-  // Inicializando
+NumericVector cppla1(NumericVector x) {
   NumericVector out(x.size());
-
   for(int i=0;i<x.size();i++)
     out[i] = log(fabs(x[i]));
-
   return out;
 }")
 
-logabs(x)
+cppla1(x)
 ```
 
 Ejemplo con NumericVector (Rcpp 2)
@@ -215,16 +250,23 @@ Ejemplo con NumericVector (Rcpp 2)
 
 Utilizando [_sugar_](http://adv-r.had.co.nz/Rcpp.html#rcpp-sugar) podemos escribirlo de una forma más sencilla!
 
-``` {r cpplogabssuggar, cache=TRUE, dependson=c(-1)}
+``` {r cpplogabssuggar, cache=TRUE, results='hold'}
 cppFunction("
-NumericVector logabs(NumericVector x) {
+NumericVector cppla2(NumericVector x) {
   return log(abs(x));
 }")
 
-logabs(x)
+cppla1(x)
 ```
 
 Algunas de las funciones incorporadas son `abs(x)`, `exp(x)`, `floor(x)`, `ceil(x)`, `pow(x, z)`. (más en breve)
+
+Ejemplo con NumericVector (Benchmark)
+=========================
+
+```{r bechnumericvect, cache=TRUE}
+benchmark(log(abs(x)), rla(x),cppla1(x),cppla2(x))[,1:4]
+```
 
 Ejemplo con NumericMatrix (R)
 ===================
@@ -251,6 +293,113 @@ NumericVector cppdiag(NumericMatrix x) {
 cppdiag(mimat)
 ```
 
+Ejemplo con List (R)
+===================
+Crearemos una lista con numeros aleatorios una matriz
+y una lista de texto
+``` {r rlist, cache=TRUE}
+rlist <- function(x,y,z) {
+    return(list(
+      x=rnorm(x),
+      y=y,
+      z=z^2
+      ))
+}
+```
+
+Ejemplo con List (Rcpp)
+===================
+
+Su equivalente en `Rcpp` (una vez mas incluyendo sugar)
+
+``` {r cpplist, cache=TRUE, dependson=c(-1)}
+cppFunction('
+List cpplist(
+  int x, CharacterVector y, NumericVector z) {
+  return List::create(
+    _["x"]=rnorm(x,0,1),
+    _["y"]=y,
+    _["z"]=pow(z,2) /* sugar */
+    );
+}')
+```
+
+Ejemplo con List (R vs Rcpp)
+======================
+
+``` {r rlistcont, cache=TRUE, dependson=c(-1)}
+set.seed(123)
+rlist(3, c("a","hola","Si"),
+      seq(-3,3))
+```
+
+***
+
+``` {r cpplistcont, cache=TRUE, dependson=c(-1)}
+set.seed(123)
+cpplist(3, c("a","hola","Si"),
+        seq(-3,3))
+```
+
+Ejemplo de funciones (R)
+====================
+
+``` {r rfun, cache=TRUE, results='hold'}
+# Funcion que llama funciones
+rf <- function(x,f) {
+  for(i in 1:100)
+    out <- f(x) 
+  return(out)
+}
+
+# Ejemplos
+rf(c(1,4,9), sqrt)
+rf(c(1,4,9), function(x) 1/x)
+```
+
+Ejemplo de funciones (Rcpp)
+====================
+
+``` {r cppfun, cache=TRUE, results='hold'}
+# Funcion que llama funciones
+cppFunction('
+NumericVector cppf(NumericVector x, Function f) {
+  NumericVector out(x.length());
+  for(int i=0;i<100;i++)
+    out=f(x);
+  return out; 
+}')
+
+# Ejemplos
+cppf(c(1,4,9), sqrt)
+cppf(c(1,4,9), function(x) 1/x)
+```
+
+Ejemplo de funciones (R vs Rcpp)
+====================
+
+Con `Rcpp` es posible acelerar los tiempos de cómputo 
+de funciones escritas por el usuario en bucles.
+
+``` {r benchfun, cache=TRUE}
+x <- 1:3
+f <- sqrt
+benchmark(rf(x,f), cppf(x, f))[,1:4]
+```
+
+Muchas Gracias!
+======================================================
+type:section
+George Vega (g.vegayon@gmail.com)
+
+http://ggvega.com
+
+**Grupo de Usuarios de R en Chile, 23 Abr 2014**
+
+(presentacion hecha con _Rstudio_ + _knitr_)
+
+![Usua](../../imagenes/patrocinio.png)
+
 Referencias
 ======================
 
@@ -258,3 +407,4 @@ Referencias
 * **Wickham, Hadley**, 2014, *Advanced R programming*,  http://adv-r.had.co.nz/
 * **Eddelbuettel, Dirk**, 2013, *Rcpp by Examples*, Workshop preceding R/Finance 2013, http://dirk.eddelbuettel.com/papers/rcpp_rfinance_may2013.pdf.
 * **Allaire, JJ**, 2013, *Rcpp Attributes*, Bay Area R User Group, http://rpubs.com/jjallaire/rcpp-attributes-bayarea-useR
+* **usuaRios**, 20\*\*, StackOverflow [rcpp], http://stackoverflow.com/questions/tagged/rcpp
